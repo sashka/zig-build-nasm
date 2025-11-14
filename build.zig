@@ -8,8 +8,11 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "nasm",
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("root.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
     });
 
     exe.addIncludePath(b.path("include"));
@@ -28,7 +31,7 @@ pub fn build(b: *std.Build) void {
         .NASM_VER = "2.16.01",
     }));
     exe.addConfigHeader(b.addConfigHeader(.{
-        .style = .{ .autoconf = b.path("config/config.h.in") },
+        .style = .{ .autoconf_undef = b.path("config/config.h.in") },
         .include_path = "config/config.h",
     }, .{
         .ABORT_ON_PANIC = have(optimize == .Debug),
@@ -87,13 +90,13 @@ pub fn build(b: *std.Build) void {
         .HAVE_CPU_TO_LE64 = null,
         .HAVE_DECL_STRCASECMP = 0,
         .HAVE_DECL_STRICMP = 0,
-        .HAVE_DECL_STRLCPY = 0,
+        .HAVE_DECL_STRLCPY = 1,
         .HAVE_DECL_STRNCASECMP = 0,
         .HAVE_DECL_STRNICMP = 0,
         .HAVE_DECL_STRNLEN = 0,
         .HAVE_DECL_STRRCHRNUL = 0,
         .HAVE_DECL_STRSEP = 0,
-        .HAVE_ENDIAN_H = 1,
+        .HAVE_ENDIAN_H = null,
         .HAVE_FACCESSAT = 1,
         .HAVE_FCNTL_H = 1,
         .HAVE_FILENO = 1,
@@ -136,7 +139,7 @@ pub fn build(b: *std.Build) void {
         .HAVE_ISASCII = 1,
         .HAVE_ISCNTRL = 1,
         .HAVE_MACHINE_ENDIAN_H = 1,
-        .HAVE_MEMPCPY = 1,
+        .HAVE_MEMPCPY = null,
         .HAVE_MEMPSET = null,
         .HAVE_MINIX_CONFIG_H = null,
         .HAVE_MMAP = 1,
@@ -155,7 +158,7 @@ pub fn build(b: *std.Build) void {
         .HAVE_STRICMP = 1,
         .HAVE_STRINGS_H = 1,
         .HAVE_STRING_H = 1,
-        .HAVE_STRLCPY = null,
+        .HAVE_STRLCPY = 1,
         .HAVE_STRNCASECMP = 1,
         .HAVE_STRNICMP = 1,
         .HAVE_STRNLEN = 1,
@@ -174,7 +177,7 @@ pub fn build(b: *std.Build) void {
         .HAVE_TYPEOF = null,
         .HAVE_UINTPTR_T = 1,
         .HAVE_UNISTD_H = null,
-        .HAVE_VSNPRINTF = null,
+        .HAVE_VSNPRINTF = 1,
         .HAVE_WCHAR_H = null,
         .HAVE__ACCESS = null,
         .HAVE__BITSCANREVERSE = null,

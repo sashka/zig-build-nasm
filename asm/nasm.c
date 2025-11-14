@@ -514,7 +514,7 @@ static void timestamp(void)
     }
 }
 
-int main(int argc, char **argv)
+int real_main(int argc, char **argv)
 {
     /* Do these as early as possible */
     error_file = stderr;
